@@ -1,4 +1,5 @@
-import React from 'react'; //import React Component
+import React from 'react'; // Import React component
+import { Routes, Route, Navigate, Link } from 'react-router-dom';
 import { AboutNav } from './Nav';
 import PetPage from './PetPage';
 import PetList from './PetList';
@@ -6,17 +7,19 @@ import AboutPage from './AboutPage';
 import ResourcesPage from './ResourcesPage';
 import PetDetail from './PetDetail';
 
-import SAMPLE_DOGS from '../data/dogs.json'; //a sample list of dogs (model)
+import SAMPLE_DOGS from '../data/dogs.json'; // A sample list of dogs (model)
 
 function App(props) {
 
-  const pets = SAMPLE_DOGS; //pretend this was loaded externally or via prop
+  const pets = SAMPLE_DOGS; // Pretend this was loaded externally or via prop
 
   return (
     <div>
       <header className="jumbotron py-4 mb-4">
         <div className="container">
-          <h1>Adopt a Pet</h1>
+          <h1>
+            <Link to="adopt">Adopt a Pet</Link>
+          </h1>
         </div>
       </header>
     
@@ -26,7 +29,15 @@ function App(props) {
             <AboutNav />
           </div>
           <div className="col">
-            <PetList pets={pets} />
+            <Routes>
+              <Route path="about" element={<AboutPage />} />
+              <Route path="resources" element={<ResourcesPage />} />
+              <Route path="adopt" element={<PetPage />} >
+                <Route path="/adopt/:petName" element={<PetDetail />} />
+                <Route index element={<PetList pets={pets} />} />
+              </Route>
+              <Route path="*" element={<Navigate to="adopt" />} />
+            </Routes>
           </div>
         </div>
       </main>
@@ -39,3 +50,4 @@ function App(props) {
 }
 
 export default App;
+
